@@ -1,0 +1,533 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mi CV - [Tu Nombre]</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+            overflow: hidden;
+        }
+
+        .header {
+            background: linear-gradient(135deg, #2c3e50 0%, #34495e 100%);
+            color: white;
+            padding: 60px 40px;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .header::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><circle cx="50" cy="50" r="2" fill="%23ffffff" opacity="0.1"/></svg>') repeat;
+            opacity: 0.1;
+        }
+
+        .profile-img {
+            width: 150px;
+            height: 150px;
+            border-radius: 50%;
+            border: 5px solid rgba(255,255,255,0.2);
+            margin: 0 auto 20px;
+            background: linear-gradient(45deg, #667eea, #764ba2);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 60px;
+            font-weight: bold;
+            position: relative;
+            z-index: 1;
+        }
+
+        .name {
+            font-size: 2.5em;
+            font-weight: 300;
+            margin-bottom: 10px;
+            position: relative;
+            z-index: 1;
+        }
+
+        .title {
+            font-size: 1.3em;
+            opacity: 0.9;
+            font-weight: 300;
+            position: relative;
+            z-index: 1;
+        }
+
+        .contact-info {
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            gap: 30px;
+            margin-top: 30px;
+            position: relative;
+            z-index: 1;
+        }
+
+        .contact-item {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 0.95em;
+        }
+
+        .download-btn {
+            background: linear-gradient(45deg, #4CAF50, #45a049);
+            color: white;
+            padding: 15px 30px;
+            border: none;
+            border-radius: 50px;
+            font-size: 1.1em;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-top: 30px;
+            box-shadow: 0 5px 15px rgba(76, 175, 80, 0.3);
+            position: relative;
+            z-index: 1;
+        }
+
+        .download-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(76, 175, 80, 0.4);
+        }
+
+        .content {
+            padding: 50px 40px;
+        }
+
+        .section {
+            margin-bottom: 50px;
+        }
+
+        .section-title {
+            font-size: 1.8em;
+            color: #2c3e50;
+            margin-bottom: 30px;
+            position: relative;
+            padding-bottom: 10px;
+        }
+
+        .section-title::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 50px;
+            height: 3px;
+            background: linear-gradient(45deg, #667eea, #764ba2);
+            border-radius: 2px;
+        }
+
+        .about-text {
+            font-size: 1.1em;
+            line-height: 1.8;
+            color: #555;
+            text-align: justify;
+        }
+
+        .experience-item, .education-item {
+            background: #f8f9fa;
+            padding: 25px;
+            border-radius: 15px;
+            margin-bottom: 20px;
+            border-left: 4px solid #667eea;
+            transition: transform 0.2s ease;
+        }
+
+        .experience-item:hover, .education-item:hover {
+            transform: translateX(5px);
+        }
+
+        .item-title {
+            font-size: 1.3em;
+            font-weight: 600;
+            color: #2c3e50;
+            margin-bottom: 5px;
+        }
+
+        .item-company, .item-institution {
+            color: #667eea;
+            font-weight: 600;
+            margin-bottom: 5px;
+        }
+
+        .item-period {
+            color: #777;
+            font-size: 0.9em;
+            margin-bottom: 15px;
+        }
+
+        .item-description {
+            color: #555;
+            line-height: 1.6;
+        }
+
+        .skills-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+        }
+
+        .skill-category {
+            background: #f8f9fa;
+            padding: 25px;
+            border-radius: 15px;
+            border-top: 4px solid #667eea;
+        }
+
+        .skill-category-title {
+            font-weight: 600;
+            color: #2c3e50;
+            margin-bottom: 15px;
+            font-size: 1.1em;
+        }
+
+        .skill-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+
+        .skill-bar {
+            width: 100px;
+            height: 8px;
+            background: #e9ecef;
+            border-radius: 4px;
+            overflow: hidden;
+        }
+
+        .skill-progress {
+            height: 100%;
+            background: linear-gradient(45deg, #667eea, #764ba2);
+            border-radius: 4px;
+            transition: width 0.5s ease;
+        }
+
+        .qr-section {
+            background: #f8f9fa;
+            padding: 30px;
+            border-radius: 15px;
+            text-align: center;
+            margin-top: 30px;
+        }
+
+        .qr-code {
+            width: 150px;
+            height: 150px;
+            margin: 20px auto;
+            background: white;
+            padding: 10px;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+
+        @media (max-width: 768px) {
+            body {
+                padding: 10px;
+            }
+
+            .header {
+                padding: 40px 20px;
+            }
+
+            .content {
+                padding: 30px 20px;
+            }
+
+            .name {
+                font-size: 2em;
+            }
+
+            .contact-info {
+                flex-direction: column;
+                gap: 15px;
+            }
+
+            .skills-container {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        @media print {
+            body {
+                background: white;
+                padding: 0;
+            }
+
+            .container {
+                box-shadow: none;
+                border-radius: 0;
+            }
+
+            .download-btn, .qr-section {
+                display: none;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header class="header">
+            <div class="profile-img">
+                <!-- Aquí puedes poner una foto o dejar las iniciales -->
+                TN
+            </div>
+            <h1 class="name">Tu Nombre Completo</h1>
+            <p class="title">Desarrollador Full Stack | Ingeniero de Software</p>
+            
+            <div class="contact-info">
+                <div class="contact-item">
+                    📧 tu.email@ejemplo.com
+                </div>
+                <div class="contact-item">
+                    📱 +54 9 11 1234-5678
+                </div>
+                <div class="contact-item">
+                    📍 Buenos Aires, Argentina
+                </div>
+                <div class="contact-item">
+                    💼 linkedin.com/in/tu-perfil
+                </div>
+            </div>
+
+            <button class="download-btn" onclick="downloadPDF()">
+                📄 Descargar CV en PDF
+            </button>
+        </header>
+
+        <main class="content">
+            <section class="section">
+                <h2 class="section-title">Sobre Mí</h2>
+                <p class="about-text">
+                    Soy un profesional apasionado por la tecnología con más de 5 años de experiencia en desarrollo de software. 
+                    Me especializo en crear soluciones innovadoras y escalables, trabajando tanto en frontend como backend. 
+                    Tengo experiencia liderando equipos y gestionando proyectos desde la concepción hasta la implementación. 
+                    Busco constantemente nuevos desafíos que me permitan crecer profesionalmente y aportar valor a la organización.
+                </p>
+            </section>
+
+            <section class="section">
+                <h2 class="section-title">Experiencia Profesional</h2>
+                
+                <div class="experience-item">
+                    <h3 class="item-title">Senior Full Stack Developer</h3>
+                    <p class="item-company">Tech Solutions S.A.</p>
+                    <p class="item-period">Enero 2022 - Presente</p>
+                    <p class="item-description">
+                        Liderazgo de equipo de desarrollo de aplicaciones web modernas utilizando React, Node.js y PostgreSQL. 
+                        Implementación de arquitecturas escalables y mejores prácticas de desarrollo. Incremento del 40% en la 
+                        eficiencia del equipo mediante metodologías ágiles.
+                    </p>
+                </div>
+
+                <div class="experience-item">
+                    <h3 class="item-title">Frontend Developer</h3>
+                    <p class="item-company">Startup Innovadora</p>
+                    <p class="item-period">Marzo 2020 - Diciembre 2021</p>
+                    <p class="item-description">
+                        Desarrollo de interfaces de usuario responsivas y accesibles usando React y TypeScript. 
+                        Colaboración estrecha con el equipo de UX/UI para implementar diseños pixel-perfect. 
+                        Optimización de performance que resultó en 50% menos tiempo de carga.
+                    </p>
+                </div>
+
+                <div class="experience-item">
+                    <h3 class="item-title">Junior Developer</h3>
+                    <p class="item-company">Consultora Digital</p>
+                    <p class="item-period">Junio 2019 - Febrero 2020</p>
+                    <p class="item-description">
+                        Desarrollo y mantenimiento de sitios web corporativos. Aprendizaje de tecnologías modernas 
+                        y mejores prácticas de desarrollo. Participación en proyectos de migración de sistemas legacy.
+                    </p>
+                </div>
+            </section>
+
+            <section class="section">
+                <h2 class="section-title">Educación</h2>
+                
+                <div class="education-item">
+                    <h3 class="item-title">Ingeniería en Sistemas</h3>
+                    <p class="item-institution">Universidad Tecnológica Nacional</p>
+                    <p class="item-period">2015 - 2019</p>
+                    <p class="item-description">
+                        Título de grado con especialización en desarrollo de software y gestión de proyectos tecnológicos.
+                        Promedio: 8.5/10
+                    </p>
+                </div>
+
+                <div class="education-item">
+                    <h3 class="item-title">Certificación AWS Solutions Architect</h3>
+                    <p class="item-institution">Amazon Web Services</p>
+                    <p class="item-period">2023</p>
+                    <p class="item-description">
+                        Certificación profesional en arquitectura de soluciones en la nube de AWS.
+                    </p>
+                </div>
+            </section>
+
+            <section class="section">
+                <h2 class="section-title">Habilidades</h2>
+                
+                <div class="skills-container">
+                    <div class="skill-category">
+                        <h3 class="skill-category-title">Frontend</h3>
+                        <div class="skill-item">
+                            <span>React/Next.js</span>
+                            <div class="skill-bar">
+                                <div class="skill-progress" style="width: 90%"></div>
+                            </div>
+                        </div>
+                        <div class="skill-item">
+                            <span>JavaScript/TypeScript</span>
+                            <div class="skill-bar">
+                                <div class="skill-progress" style="width: 85%"></div>
+                            </div>
+                        </div>
+                        <div class="skill-item">
+                            <span>CSS/Sass</span>
+                            <div class="skill-bar">
+                                <div class="skill-progress" style="width: 80%"></div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="skill-category">
+                        <h3 class="skill-category-title">Backend</h3>
+                        <div class="skill-item">
+                            <span>Node.js/Express</span>
+                            <div class="skill-bar">
+                                <div class="skill-progress" style="width: 85%"></div>
+                            </div>
+                        </div>
+                        <div class="skill-item">
+                            <span>Python/Django</span>
+                            <div class="skill-bar">
+                                <div class="skill-progress" style="width: 75%"></div>
+                            </div>
+                        </div>
+                        <div class="skill-item">
+                            <span>PostgreSQL/MongoDB</span>
+                            <div class="skill-bar">
+                                <div class="skill-progress" style="width: 80%"></div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="skill-category">
+                        <h3 class="skill-category-title">Herramientas</h3>
+                        <div class="skill-item">
+                            <span>Git/GitHub</span>
+                            <div class="skill-bar">
+                                <div class="skill-progress" style="width: 90%"></div>
+                            </div>
+                        </div>
+                        <div class="skill-item">
+                            <span>Docker</span>
+                            <div class="skill-bar">
+                                <div class="skill-progress" style="width: 70%"></div>
+                            </div>
+                        </div>
+                        <div class="skill-item">
+                            <span>AWS</span>
+                            <div class="skill-bar">
+                                <div class="skill-progress" style="width: 75%"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <div class="qr-section">
+                <h3>Comparte este CV</h3>
+                <p>Escanea el código QR para acceder a esta página</p>
+                <div class="qr-code" id="qrcode">
+                    <!-- El QR se generará aquí -->
+                </div>
+                <p><small>URL: <span id="currentUrl"></span></small></p>
+            </div>
+        </main>
+    </div>
+
+    <script>
+        // Función para descargar PDF
+        function downloadPDF() {
+            // Opción 1: Usar window.print() - funciona en todos los navegadores
+            window.print();
+            
+            // Opción 2: Si quieres usar una librería más avanzada, puedes agregar jsPDF
+            // Descomenta las siguientes líneas y agrega la librería jsPDF
+            /*
+            const element = document.querySelector('.container');
+            const opt = {
+                margin: 0.5,
+                filename: 'mi-cv.pdf',
+                image: { type: 'jpeg', quality: 0.98 },
+                html2canvas: { scale: 2 },
+                jsPDF: { unit: 'in', format: 'letter', orientation: 'portrait' }
+            };
+            html2pdf().set(opt).from(element).save();
+            */
+        }
+
+        // Generar QR Code simple (puedes usar una librería más avanzada)
+        function generateQR() {
+            const currentUrl = window.location.href;
+            document.getElementById('currentUrl').textContent = currentUrl;
+            
+            // QR Code simple usando una API gratuita
+            const qrContainer = document.getElementById('qrcode');
+            const qrSize = 150;
+            const qrImg = document.createElement('img');
+            qrImg.src = `https://api.qrserver.com/v1/create-qr-code/?size=${qrSize}x${qrSize}&data=${encodeURIComponent(currentUrl)}`;
+            qrImg.alt = 'QR Code';
+            qrImg.style.width = '100%';
+            qrImg.style.height = '100%';
+            qrContainer.appendChild(qrImg);
+        }
+
+        // Inicializar cuando se carga la página
+        window.addEventListener('load', function() {
+            generateQR();
+            
+            // Animar las barras de habilidades
+            const skillBars = document.querySelectorAll('.skill-progress');
+            skillBars.forEach(bar => {
+                const width = bar.style.width;
+                bar.style.width = '0';
+                setTimeout(() => {
+                    bar.style.width = width;
+                }, 500);
+            });
+        });
+    </script>
+</body>
+</html>
