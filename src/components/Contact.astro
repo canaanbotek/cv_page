@@ -8,9 +8,9 @@ const contact = {
 ---
 <section id="contacto" class="relative px-6 md:px-12 pt-24 md:pt-32 pb-40 md:pb-56" style="
   background:
-    linear-gradient(to bottom, #0e0f11 0%, rgba(14,15,17,0) 48%),
+    linear-gradient(to bottom, #0e0f11 0%, rgba(14,15,17,0) 80%),
     radial-gradient(ellipse 160% 80% at 50% 108%,
-      #ffffff       0%,
+      #ffffff       5%,
       #fff3b0       7%,
       #ffb347      17%,
       #ff6030      30%,
@@ -71,7 +71,15 @@ const contact = {
       </a>
     </div>
 
-    <p class="mt-6 font-sans text-xs text-white/25">{contact.location}</p>
+    <a
+      href={`${import.meta.env.BASE_URL}cv_1.pdf`}
+      download="CV_BOTEK-Ing-Electronico.pdf"
+      class="inline-flex items-center gap-3 font-mono text-xs uppercase tracking-[1.4px] border border-white/20 text-white/50 hover:bg-white/5 hover:text-white transition-colors duration-200 px-6 py-3 mt-6"
+    >
+      Descargar CV ↓
+    </a>
+
+    <p class="mt-4 font-sans text-xs text-white/25">{contact.location}</p>
 
   </div>
 </section>
