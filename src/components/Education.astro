@@ -1,0 +1,60 @@
+---
+const education = [
+  {
+    institution: 'Universidad Nacional de La Plata (UNLP)',
+    location:    'La Plata, Argentina',
+    degree:      'Ingeniería Electrónica',
+    year:        '2019',
+    current:     false,
+  },
+  {
+    institution: 'Universidad de Buenos Aires (UBA – FIUBA)',
+    location:    'Buenos Aires, Argentina',
+    degree:      'Especialización en Internet of Things',
+    year:        'En curso',
+    current:     true,
+  },
+  {
+    institution: 'Universidad de Buenos Aires (UBA – FIUBA)',
+    location:    'Buenos Aires, Argentina',
+    degree:      'Especialización en Inteligencia Artificial',
+    year:        'En curso',
+    current:     true,
+  },
+];
+---
+<section id="educacion" class="px-6 md:px-12 py-24 md:py-32 border-t border-white/10">
+  <div class="max-w-[1200px] mx-auto">
+
+    <div class="mb-16">
+      <span class="font-mono text-xs uppercase tracking-[1.4px] text-white/30">— Formación</span>
+      <h2 class="font-mono font-light text-3xl md:text-4xl text-white mt-3">Educación</h2>
+    </div>
+
+    <div class="space-y-0">
+      {education.map((edu) => (
+        <div class="grid md:grid-cols-[220px_1fr] gap-6 md:gap-12 py-10 border-b border-white/10 last:border-0">
+
+          <div>
+            <p class="font-sans text-sm text-white/40">{edu.location}</p>
+            <p class="font-mono text-xs text-white/30 mt-1">{edu.year}</p>
+          </div>
+
+          <div>
+            <p class="font-sans text-base text-white mb-1">{edu.institution}</p>
+            <div class="flex flex-wrap items-center gap-3">
+              <p class="font-sans text-sm text-white/60">{edu.degree}</p>
+              {edu.current && (
+                <span class="font-mono text-[10px] uppercase tracking-[1px] text-white border border-white/20 px-1.5 py-0.5">
+                  En curso
+                </span>
+              )}
+            </div>
+          </div>
+
+        </div>
+      ))}
+    </div>
+
+  </div>
+</section>

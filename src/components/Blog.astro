@@ -1,0 +1,60 @@
+---
+const venture = {
+  name:        'Portal de Impresión 3D Industrial',
+  tagline:     'Fabricación de precisión. Del diseño al prototipo.',
+  description: 'Emprendimiento personal orientado a ofrecer servicios de impresión 3D FDM a escala industrial. Trabajo con clientes que necesitan piezas funcionales, prototipos de alta fidelidad y soluciones a medida que combinan manufactura aditiva con electrónica, conectividad y visión artificial.',
+  url:         'https://TODO.com', // TODO: completar URL del portal
+  services: [
+    {
+      title:       'Impresión 3D FDM Industrial',
+      description: 'Producción de piezas funcionales y series cortas con materiales técnicos. Tolerancias ajustadas, acabados consistentes.',
+    },
+    {
+      title:       'Diseño y Prototipado',
+      description: 'Elaboración de diseños desde cero o a partir de especificaciones del cliente. Iteración rápida hasta validar forma, ajuste y función.',
+    },
+    {
+      title:       'Integración con Electrónica & PCB',
+      description: 'Prototipos que combinan estructura impresa con circuitos desarrollados a medida. Diseño de PCB incluido en el flujo de trabajo.',
+    },
+    {
+      title:       'IoT & Visión Artificial',
+      description: 'Dispositivos conectados y sistemas de percepción embebidos en el producto físico. Desde el hardware hasta la lógica de control.',
+    },
+  ],
+};
+---
+<section id="emprendimiento" class="px-6 md:px-12 py-24 md:py-32 border-t border-white/10">
+  <div class="max-w-[1200px] mx-auto">
+
+    <div class="mb-16">
+      <span class="font-mono text-xs uppercase tracking-[1.4px] text-white/30">— Emprendimiento</span>
+      <h2 class="font-mono font-light text-3xl md:text-4xl text-white mt-3">{venture.name}</h2>
+    </div>
+
+    <div class="grid md:grid-cols-[1fr_1fr] gap-16 mb-16">
+      <div>
+        <p class="font-sans text-lg text-white/60 leading-snug mb-6">{venture.tagline}</p>
+        <p class="font-sans text-base text-white/40 leading-relaxed mb-10">{venture.description}</p>
+        <a
+          href={venture.url}
+          target="_blank"
+          rel="noopener noreferrer"
+          class="inline-flex items-center gap-3 font-mono text-xs uppercase tracking-[1.4px] bg-white text-[#1f2228] hover:bg-white/90 transition-colors duration-200 px-6 py-3"
+        >
+          Visitar Portal ↗
+        </a>
+      </div>
+
+      <div class="space-y-px">
+        {venture.services.map((service) => (
+          <div class="bg-white/[0.03] hover:bg-white/[0.06] border border-white/10 hover:border-white/20 px-6 py-5 transition-all duration-200">
+            <p class="font-mono text-sm text-white mb-2">{service.title}</p>
+            <p class="font-sans text-sm text-white/40 leading-relaxed">{service.description}</p>
+          </div>
+        ))}
+      </div>
+    </div>
+
+  </div>
+</section>

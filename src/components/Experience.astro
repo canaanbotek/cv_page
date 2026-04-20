@@ -1,0 +1,85 @@
+---
+const experiences = [
+  {
+    company:  'Área de Transporte – Provincia de La Rioja',
+    role:     'Consultor Independiente – Proyecto de IA y Visión Artificial',
+    location: 'La Plata, Buenos Aires',
+    period:   '10/2025 – Actualidad',
+    current:  true,
+    items: [
+      'Desarrollo de un sistema de detección de somnolencia y atención mediante técnicas de visión artificial con el objetivo de mejorar la seguridad en el transporte del sector privado, público y particular.',
+    ],
+  },
+  {
+    company:  'FDX-Ingeniería',
+    role:     'Desarrollador de Software (Contrato Híbrido)',
+    location: 'La Plata, Buenos Aires',
+    period:   '09/2019 – 03/2025',
+    current:  false,
+    items: [
+      'Implementé sistemas de automatización basados en microcontroladores, optimizando flujos de trabajo en entornos productivos.',
+      'Desarrollé soluciones de monitoreo y alerta mediante RFID potenciando el monitoreo de variables críticas en producción.',
+      'Diseñé interfaces embebidas que facilitaron la configuración y operación de equipos logísticos en entornos productivos.',
+      'Lideré el desarrollo de una interfaz en la nube para visualización de variables en tiempo real, potenciando la supervisión, el planeamiento de procesos y la toma de decisiones basadas en datos.',
+      'Refactoricé sistemas de gestión y registro de datos de equipos industriales, mejorando su rendimiento y escalabilidad.',
+    ],
+  },
+  {
+    company:  'FLEXAR S.R.L.',
+    role:     'Desarrollador de Software (Híbrido)',
+    location: 'San Martín, Buenos Aires',
+    period:   '04/2022 – 12/2023',
+    current:  false,
+    items: [
+      'Lideré proyectos de digitalización y automatización de procesos productivos, desarrollando sistemas de gestión de producción, control de stock y trazabilidad impactando en la eficiencia operativa de la planta.',
+      'Diseñé e implementé herramientas para la captura y análisis de datos en tiempo real integrando dispositivos y sistemas de control mediante firmware y rediseño de hardware, facilitando la toma de decisiones basada en indicadores de producción.',
+      'Desarrollé mejoras sobre el ERP Tryton, enfocadas en optimizar la gestión logística, control de flujo de insumos, seguimiento de etapas de manufactura y supervisión de procesos.',
+      'Implementé prácticas de DevOps para garantizar continuidad y estabilidad en los sistemas de gestión.',
+      'Coordiné relevamiento de requerimientos con operarios y supervisores, logrando una adopción integral del sistema en todas las áreas de producción y logística.',
+    ],
+  },
+];
+---
+<section id="experiencia" class="px-6 md:px-12 py-24 md:py-32 border-t border-white/10">
+  <div class="max-w-[1200px] mx-auto">
+
+    <div class="mb-16">
+      <span class="font-mono text-xs uppercase tracking-[1.4px] text-white/30">— Trayectoria</span>
+      <h2 class="font-mono font-light text-3xl md:text-4xl text-white mt-3">Experiencia Profesional</h2>
+    </div>
+
+    <div class="space-y-16">
+      {experiences.map((exp) => (
+        <div class="grid md:grid-cols-[220px_1fr] gap-6 md:gap-12">
+
+          <div>
+            <div class="flex flex-wrap items-start gap-2 mb-1">
+              <span class="font-mono text-sm text-white">{exp.company}</span>
+              {exp.current && (
+                <span class="font-mono text-[10px] uppercase tracking-[1px] text-white border border-white/20 px-1.5 py-0.5 shrink-0">
+                  Actual
+                </span>
+              )}
+            </div>
+            <p class="font-sans text-sm text-white/40">{exp.location}</p>
+            <p class="font-mono text-xs text-white/30 mt-1">{exp.period}</p>
+          </div>
+
+          <div class="border-l border-white/10 pl-6 md:pl-8">
+            <p class="font-sans text-base text-white/70 mb-6">{exp.role}</p>
+            <ul class="space-y-3">
+              {exp.items.map((item) => (
+                <li class="font-sans text-sm text-white/50 leading-relaxed flex gap-3">
+                  <span class="text-white/20 shrink-0 mt-1 select-none">—</span>
+                  <span>{item}</span>
+                </li>
+              ))}
+            </ul>
+          </div>
+
+        </div>
+      ))}
+    </div>
+
+  </div>
+</section>
