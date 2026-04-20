@@ -22,3 +22,7 @@ pnpm-debug.log*
 
 # jetbrains setting folder
 .idea/
+
+# Developer Desing and AI files
+DESING.md
+CLAUDE.md
