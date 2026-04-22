@@ -10,8 +10,8 @@ const links = [
 <header class="fixed top-0 left-0 right-0 z-50 bg-[#0e0f11]/95 backdrop-blur-sm border-b border-white/10">
   <nav class="max-w-[1200px] mx-auto px-6 md:px-12 h-14 flex items-center justify-between">
 
-    <a href="/" class="font-mono text-sm uppercase tracking-[1.4px] text-white hover:text-white/50 transition-colors duration-200">
-      CCB
+    <a id="rocket-link" href="/cv_page" aria-label="Inicio" class="block w-10 h-10 shrink-0">
+      <canvas id="rocket-canvas" width="40" height="40" class="block"></canvas>
     </a>
 
     <div class="hidden md:flex items-center gap-8">
@@ -64,7 +64,158 @@ const links = [
 </header>
 
 <script>
+  // ── Mobile menu ──────────────────────────────────────────────────
   const btn  = document.getElementById('mobile-menu-btn');
   const menu = document.getElementById('mobile-menu');
   btn?.addEventListener('click', () => menu?.classList.toggle('hidden'));
+
+  // ── Rocket canvas ────────────────────────────────────────────────
+  (function () {
+    const canvas = document.getElementById('rocket-canvas') as HTMLCanvasElement | null;
+    if (!canvas) return;
+    const ctx = canvas.getContext('2d');
+    if (!ctx) return;
+
+    const W = 40, H = 40;
+    const CX = W / 2, CY = H / 2;
+
+    // ── Physics ──────────────────────────────────────────────────
+    // rocketVel > 0 → descending (particles go UP)
+    // rocketVel < 0 → ascending  (particles go DOWN)
+    let rocketVel  = 0;   // current velocity (decays each frame)
+    const DAMPING  = 0.88; // per-frame multiplier — higher = slower decay
+    const DEAD_ZONE = 0.04; // below this, snap to 0
+
+    // ── Particles ─────────────────────────────────────────────────
+    type Particle = { x: number; y: number; vy: number; life: number; maxLife: number; r: number };
+    const particles: Particle[] = [];
+
+    function spawnParticle() {
+      // spawn from rocket nozzle (bottom center, with small spread)
+      const spread = 3;
+      particles.push({
+        x:       CX + (Math.random() - 0.5) * spread,
+        y:       CY + 9,                    // nozzle Y
+        vy:      rocketVel * (0.8 + Math.random() * 0.4), // inherit vel + noise
+        life:    1,
+        maxLife: 18 + Math.random() * 14,   // frames alive
+        r:       0.6 + Math.random() * 0.8,
+      });
+    }
+
+    // ── Draw rocket (static shape, always upright) ────────────────
+    function drawRocket() {
+      ctx.save();
+
+      // Body
+      ctx.beginPath();
+      ctx.moveTo(CX, CY - 11);          // nose tip
+      ctx.bezierCurveTo(CX + 5, CY - 4, CX + 5, CY + 3, CX + 4, CY + 8);
+      ctx.lineTo(CX - 4, CY + 8);
+      ctx.bezierCurveTo(CX - 5, CY + 3, CX - 5, CY - 4, CX, CY - 11);
+      ctx.closePath();
+      ctx.fillStyle = 'rgba(255,255,255,0.85)';
+      ctx.fill();
+
+      // Window
+      ctx.beginPath();
+      ctx.arc(CX, CY - 1, 2.2, 0, Math.PI * 2);
+      ctx.fillStyle = 'rgba(14,15,17,0.9)';
+      ctx.fill();
+      ctx.strokeStyle = 'rgba(255,255,255,0.4)';
+      ctx.lineWidth = 0.7;
+      ctx.stroke();
+
+      // Left fin
+      ctx.beginPath();
+      ctx.moveTo(CX - 4, CY + 5);
+      ctx.lineTo(CX - 8, CY + 10);
+      ctx.lineTo(CX - 4, CY + 8);
+      ctx.closePath();
+      ctx.fillStyle = 'rgba(255,255,255,0.55)';
+      ctx.fill();
+
+      // Right fin
+      ctx.beginPath();
+      ctx.moveTo(CX + 4, CY + 5);
+      ctx.lineTo(CX + 8, CY + 10);
+      ctx.lineTo(CX + 4, CY + 8);
+      ctx.closePath();
+      ctx.fillStyle = 'rgba(255,255,255,0.55)';
+      ctx.fill();
+
+      ctx.restore();
+    }
+
+    // ── Animation loop ────────────────────────────────────────────
+    function frame() {
+      ctx.clearRect(0, 0, W, H);
+
+      // Decay velocity
+      rocketVel *= DAMPING;
+      if (Math.abs(rocketVel) < DEAD_ZONE) rocketVel = 0;
+
+      // Spawn new particles while moving
+      if (Math.abs(rocketVel) > DEAD_ZONE) {
+        const count = Math.ceil(Math.abs(rocketVel) * 1.4);
+        for (let i = 0; i < count; i++) spawnParticle();
+      }
+
+      // Update & draw particles (behind rocket)
+      for (let i = particles.length - 1; i >= 0; i--) {
+        const p = particles[i];
+        p.y    -= p.vy;          // move (negative vy = moves down = ascending rocket)
+        p.life -= 1 / p.maxLife;
+
+        if (p.life <= 0 || p.y < -2 || p.y > H + 2) {
+          particles.splice(i, 1);
+          continue;
+        }
+
+        const opacity = Math.min(p.life * 1.8, 1) * 0.75;
+        ctx.beginPath();
+        ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
+        ctx.fillStyle = `rgba(255,255,255,${opacity.toFixed(3)})`;
+        ctx.fill();
+      }
+
+      drawRocket();
+      requestAnimationFrame(frame);
+    }
+
+    requestAnimationFrame(frame);
+
+    // ── Scroll → velocity ─────────────────────────────────────────
+    let lastScrollY  = window.scrollY;
+    let lastScrollAt = performance.now();
+
+    function onScroll() {
+      const now   = performance.now();
+      const dy    = window.scrollY - lastScrollY;
+      const dt    = Math.max(now - lastScrollAt, 8);        // ms
+      const speed = dy / dt;                                // px/ms
+
+      // Map scroll speed to rocket velocity (clamped)
+      const impulse = Math.max(-4, Math.min(4, speed * 6));
+      rocketVel += impulse * 0.55;
+      rocketVel  = Math.max(-5, Math.min(5, rocketVel));   // hard clamp
+
+      lastScrollY  = window.scrollY;
+      lastScrollAt = now;
+    }
+
+    window.addEventListener('scroll', onScroll, { passive: true });
+
+    // ── Click rocket / home buttons → ascent impulse ──────────────
+    function triggerAscent() {
+      rocketVel = -4.5;
+    }
+
+    document.getElementById('rocket-link')?.addEventListener('click', triggerAscent);
+
+    // Hook into any element with data-go-home attribute (for Contact button)
+    document.querySelectorAll('[data-go-home]').forEach(el => {
+      el.addEventListener('click', triggerAscent);
+    });
+  })();
 </script>
