@@ -1,6 +1,8 @@
 ---
 import BlackholeBackground from './BlackholeBackground.astro';
 
+const base = import.meta.env.BASE_URL.replace(/\/?$/, '/');
+
 const profile = {
   firstName:  'Christian Canaan',
   lastName:   'Castro Botek',
@@ -51,7 +53,7 @@ const profile = {
           Ver Experiencia
         </a>
         <a
-          href={`${import.meta.env.BASE_URL}cv_1.pdf`}
+          href={`${base}cv_1.pdf`}
           download="CV_BOTEK-Ing-Electronico.pdf"
           class="font-mono text-xs uppercase tracking-[1.4px] border border-white/20 text-white/50 hover:bg-white/5 hover:text-white transition-colors duration-200 px-6 py-3 text-center"
         >
@@ -74,7 +76,7 @@ const profile = {
     <!-- Profile image -->
     <div class="shrink-0 self-start md:self-center">
       <img
-        src={`${import.meta.env.BASE_URL}profile.jpeg`}
+        src={`${base}profile.jpeg`}
         alt="Christian Castro Botek"
         class="w-48 h-48 md:w-64 md:h-74 object-cover grayscale"
         style="mask-image: radial-gradient(ellipse 80% 80% at 50% 50%, black 40%, transparent 100%); -webkit-mask-image: radial-gradient(ellipse 80% 80% at 50% 50%, black 40%, transparent 100%);"
