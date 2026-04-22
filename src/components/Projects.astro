@@ -1,4 +1,6 @@
 ---
+import BlackholeBackground from './BlackholeBackground.astro';
+
 interface Project {
   title:       string;
   description: string;
@@ -11,8 +13,9 @@ const projects: Project[] = [
   // Añadir proyectos aquí
 ];
 ---
-<section id="proyectos" class="px-6 md:px-12 py-24 md:py-32 border-t border-white/10">
-  <div class="max-w-[1200px] mx-auto">
+<section id="proyectos" class="relative px-6 md:px-12 py-24 md:py-32 border-t border-white/10 overflow-hidden">
+  <BlackholeBackground />
+  <div class="relative z-10 max-w-[1200px] mx-auto">
 
     <div class="mb-16">
       <span class="font-mono text-xs uppercase tracking-[1.4px] text-white/30">— Trabajo</span>
