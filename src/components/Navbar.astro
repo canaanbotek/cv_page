@@ -78,38 +78,85 @@ const links = [
 
     const W = 40, H = 40;
     const CX = W / 2, CY = H / 2;
+    const GROUND_Y = CY + 13;   // surface line — just below rocket fins
 
-    // ── Physics ──────────────────────────────────────────────────
-    // rocketVel > 0 → descending (particles go UP)
-    // rocketVel < 0 → ascending  (particles go DOWN)
-    let rocketVel  = 0;   // current velocity (decays each frame)
-    const DAMPING  = 0.88; // per-frame multiplier — higher = slower decay
-    const DEAD_ZONE = 0.04; // below this, snap to 0
+    // ── Physics ───────────────────────────────────────────────────
+    let rocketVel   = 0;
+    const DAMPING   = 0.88;
+    const DEAD_ZONE = 0.04;
+
+    // ── Landing state ─────────────────────────────────────────────
+    let landed          = false;
+    let landingFired    = false;  // burst spawns only once per landing
+    let surfaceAlpha    = 0;      // lerped 0→1 on land, 1→0 on depart
 
     // ── Particles ─────────────────────────────────────────────────
-    type Particle = { x: number; y: number; vy: number; life: number; maxLife: number; r: number };
+    type Particle = {
+      x: number; y: number;
+      vx: number; vy: number;
+      life: number; maxLife: number; r: number;
+      kind: 'exhaust' | 'ambient' | 'dust';
+    };
     const particles: Particle[] = [];
 
-    function spawnParticle() {
-      // spawn from rocket nozzle (bottom center, with small spread)
-      const spread = 3;
-      particles.push({
-        x:       CX + (Math.random() - 0.5) * spread,
-        y:       CY + 9,                    // nozzle Y
-        vy:      rocketVel * (0.8 + Math.random() * 0.4), // inherit vel + noise
-        life:    1,
-        maxLife: 18 + Math.random() * 14,   // frames alive
-        r:       0.6 + Math.random() * 0.8,
-      });
+    function spawnScrollParticle() {
+      if (rocketVel < 0) {
+        particles.push({
+          x: CX + (Math.random() - 0.5) * 3, y: CY + 9,
+          vx: 0, vy: rocketVel * (0.8 + Math.random() * 0.4),
+          life: 1, maxLife: 18 + Math.random() * 14,
+          r: 0.6 + Math.random() * 0.8, kind: 'exhaust',
+        });
+      } else {
+        particles.push({
+          x: 2 + Math.random() * (W - 4), y: H + 2,
+          vx: 0, vy: rocketVel * (0.35 + Math.random() * 0.25),
+          life: 1, maxLife: 30 + Math.random() * 20,
+          r: 0.3 + Math.random() * 0.45, kind: 'ambient',
+        });
+      }
     }
 
-    // ── Draw rocket (static shape, always upright) ────────────────
+    function spawnLandingDust() {
+      for (let i = 0; i < 16; i++) {
+        const side = Math.random() < 0.5 ? -1 : 1;
+        particles.push({
+          x: CX + (Math.random() - 0.5) * 6,
+          y: GROUND_Y - 1,
+          vx: side * (0.5 + Math.random() * 1.8),
+          vy: -(0.15 + Math.random() * 0.5),
+          life: 1,
+          maxLife: 45 + Math.random() * 35,
+          r: 0.35 + Math.random() * 0.65,
+          kind: 'dust',
+        });
+      }
+    }
+
+    // ── Draw surface line ─────────────────────────────────────────
+    function drawSurface() {
+      if (surfaceAlpha <= 0.01) return;
+      const grad = ctx.createLinearGradient(0, 0, W, 0);
+      grad.addColorStop(0,    'rgba(255,255,255,0)');
+      grad.addColorStop(0.15, `rgba(255,255,255,${(surfaceAlpha * 0.55).toFixed(3)})`);
+      grad.addColorStop(0.5,  `rgba(255,255,255,${(surfaceAlpha * 0.75).toFixed(3)})`);
+      grad.addColorStop(0.85, `rgba(255,255,255,${(surfaceAlpha * 0.55).toFixed(3)})`);
+      grad.addColorStop(1,    'rgba(255,255,255,0)');
+      ctx.save();
+      ctx.beginPath();
+      ctx.moveTo(0, GROUND_Y);
+      ctx.lineTo(W, GROUND_Y);
+      ctx.strokeStyle = grad;
+      ctx.lineWidth = 0.8;
+      ctx.stroke();
+      ctx.restore();
+    }
+
+    // ── Draw rocket ───────────────────────────────────────────────
     function drawRocket() {
       ctx.save();
-
-      // Body
       ctx.beginPath();
-      ctx.moveTo(CX, CY - 11);          // nose tip
+      ctx.moveTo(CX, CY - 11);
       ctx.bezierCurveTo(CX + 5, CY - 4, CX + 5, CY + 3, CX + 4, CY + 8);
       ctx.lineTo(CX - 4, CY + 8);
       ctx.bezierCurveTo(CX - 5, CY + 3, CX - 5, CY - 4, CX, CY - 11);
@@ -117,7 +164,6 @@ const links = [
       ctx.fillStyle = 'rgba(255,255,255,0.85)';
       ctx.fill();
 
-      // Window
       ctx.beginPath();
       ctx.arc(CX, CY - 1, 2.2, 0, Math.PI * 2);
       ctx.fillStyle = 'rgba(14,15,17,0.9)';
@@ -126,7 +172,6 @@ const links = [
       ctx.lineWidth = 0.7;
       ctx.stroke();
 
-      // Left fin
       ctx.beginPath();
       ctx.moveTo(CX - 4, CY + 5);
       ctx.lineTo(CX - 8, CY + 10);
@@ -135,7 +180,6 @@ const links = [
       ctx.fillStyle = 'rgba(255,255,255,0.55)';
       ctx.fill();
 
-      // Right fin
       ctx.beginPath();
       ctx.moveTo(CX + 4, CY + 5);
       ctx.lineTo(CX + 8, CY + 10);
@@ -143,7 +187,6 @@ const links = [
       ctx.closePath();
       ctx.fillStyle = 'rgba(255,255,255,0.55)';
       ctx.fill();
-
       ctx.restore();
     }
 
@@ -151,28 +194,53 @@ const links = [
     function frame() {
       ctx.clearRect(0, 0, W, H);
 
-      // Decay velocity
-      rocketVel *= DAMPING;
-      if (Math.abs(rocketVel) < DEAD_ZONE) rocketVel = 0;
+      // Lerp surface line alpha
+      const targetAlpha = landed ? 1 : 0;
+      surfaceAlpha += (targetAlpha - surfaceAlpha) * 0.07;
 
-      // Spawn new particles while moving
-      if (Math.abs(rocketVel) > DEAD_ZONE) {
-        const count = Math.ceil(Math.abs(rocketVel) * 1.4);
-        for (let i = 0; i < count; i++) spawnParticle();
+      // Decay velocity (blocked while fully landed)
+      if (!landed) {
+        rocketVel *= DAMPING;
+        if (Math.abs(rocketVel) < DEAD_ZONE) rocketVel = 0;
+      } else {
+        rocketVel = 0;
       }
 
-      // Update & draw particles (behind rocket)
+      // Spawn scroll particles (not while landed)
+      if (!landed && Math.abs(rocketVel) > DEAD_ZONE) {
+        const rate  = rocketVel < 0 ? 1.4 : 0.25;
+        const count = Math.ceil(Math.abs(rocketVel) * rate);
+        for (let i = 0; i < count; i++) spawnScrollParticle();
+      }
+
+      // Spawn landing dust burst (once)
+      if (landed && !landingFired) {
+        landingFired = true;
+        spawnLandingDust();
+      }
+
+      // Draw surface behind everything
+      drawSurface();
+
+      // Update & draw particles
       for (let i = particles.length - 1; i >= 0; i--) {
         const p = particles[i];
-        p.y    -= p.vy;          // move (negative vy = moves down = ascending rocket)
         p.life -= 1 / p.maxLife;
+        p.y    -= p.vy;
+        p.x    += p.vx;
 
-        if (p.life <= 0 || p.y < -2 || p.y > H + 2) {
+        if (p.kind === 'dust') {
+          p.vx *= 0.90;
+          p.vy *= 0.92;
+        }
+
+        if (p.life <= 0 || p.y < -2 || p.y > H + 2 || p.x < -4 || p.x > W + 4) {
           particles.splice(i, 1);
           continue;
         }
 
-        const opacity = Math.min(p.life * 1.8, 1) * 0.75;
+        const maxOpac = p.kind === 'ambient' ? 0.35 : p.kind === 'dust' ? 0.50 : 0.75;
+        const opacity = Math.min(p.life * 1.8, 1) * maxOpac;
         ctx.beginPath();
         ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
         ctx.fillStyle = `rgba(255,255,255,${opacity.toFixed(3)})`;
@@ -185,20 +253,36 @@ const links = [
 
     requestAnimationFrame(frame);
 
-    // ── Scroll → velocity ─────────────────────────────────────────
+    // ── Scroll → velocity + bottom detection ──────────────────────
     let lastScrollY  = window.scrollY;
     let lastScrollAt = performance.now();
+
+    function isAtBottom() {
+      return window.scrollY + window.innerHeight >= document.documentElement.scrollHeight - 8;
+    }
 
     function onScroll() {
       const now   = performance.now();
       const dy    = window.scrollY - lastScrollY;
-      const dt    = Math.max(now - lastScrollAt, 8);        // ms
-      const speed = dy / dt;                                // px/ms
+      const dt    = Math.max(now - lastScrollAt, 8);
+      const speed = dy / dt;
 
-      // Map scroll speed to rocket velocity (clamped)
-      const impulse = Math.max(-4, Math.min(4, speed * 6));
-      rocketVel += impulse * 0.55;
-      rocketVel  = Math.max(-5, Math.min(5, rocketVel));   // hard clamp
+      const atBottom = isAtBottom();
+
+      if (atBottom && !landed) {
+        landed = true;
+      } else if (!atBottom && landed) {
+        // Departing from ground → ascent impulse
+        landed       = false;
+        landingFired = false;
+        rocketVel    = -4.5;
+      }
+
+      if (!landed) {
+        const impulse = Math.max(-4, Math.min(4, speed * 6));
+        rocketVel += impulse * 0.55;
+        rocketVel  = Math.max(-5, Math.min(5, rocketVel));
+      }
 
       lastScrollY  = window.scrollY;
       lastScrollAt = now;
@@ -208,12 +292,12 @@ const links = [
 
     // ── Click rocket / home buttons → ascent impulse ──────────────
     function triggerAscent() {
-      rocketVel = -4.5;
+      landed       = false;
+      landingFired = false;
+      rocketVel    = -4.5;
     }
 
     document.getElementById('rocket-link')?.addEventListener('click', triggerAscent);
-
-    // Hook into any element with data-go-home attribute (for Contact button)
     document.querySelectorAll('[data-go-home]').forEach(el => {
       el.addEventListener('click', triggerAscent);
     });
