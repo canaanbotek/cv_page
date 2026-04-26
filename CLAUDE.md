@@ -49,6 +49,38 @@ Every section component follows this pattern:
 - **`Projects`**: component exists but is commented out in `index.astro`.
 - **`Contact`**: LinkedIn and GitHub URLs have TODO placeholders in the component data object.
 
+## Project structure
+
+```
+cv_page/
+├── public/                  # Static assets served at root
+│   ├── cv_1.pdf             # Downloadable CV
+│   ├── profile.jpeg         # Profile photo (Hero section)
+│   └── favicon.svg / .ico / engineering.ico
+├── src/
+│   ├── pages/
+│   │   └── index.astro      # Single route — composes all sections
+│   ├── layouts/
+│   │   └── Layout.astro     # HTML shell: fonts, meta, body background
+│   ├── components/
+│   │   ├── BlackholeBackground.astro  # Shared canvas particle animation
+│   │   ├── Navbar.astro               # Fixed header + rocket canvas logo
+│   │   ├── Hero.astro                 # Landing section with profile photo
+│   │   ├── Experience.astro           # Work history
+│   │   ├── ReasoningFlow.astro        # 5-phase methodology (no BlackholeBackground)
+│   │   ├── Education.astro            # Academic background
+│   │   ├── Skills.astro               # Technical + soft skills + languages
+│   │   ├── Blog.astro                 # 3DIndustry venture (renamed from Blog)
+│   │   ├── Contact.astro              # Contact links + sunburst gradient bg
+│   │   └── Projects.astro             # (commented out in index.astro)
+│   └── styles/
+│       └── global.css       # @import "tailwindcss" + @theme font vars
+├── RAZONAMIENTO.md          # Source framework behind ReasoningFlow content
+├── DESIGN.md                # Design notes
+├── astro.config.mjs         # Vite + Tailwind plugin + base URL config
+└── tsconfig.json            # Extends astro/tsconfigs/strict
+```
+
 ## Deployment
 
 GitHub Pages via the `base: '/cv_page'` setting in `astro.config.mjs`. Static build only — no server-side rendering.
