@@ -5,56 +5,120 @@ interface Project {
   title:       string;
   description: string;
   tags:        string[];
+  status:      'En curso' | 'En fase de diseño';
   url?:        string;
   repo?:       string;
 }
 
 const projects: Project[] = [
-  // Añadir proyectos aquí
+  {
+    title: 'Monitor de temperatura y humedad para filamentos de impresión 3D',
+    description:
+      'Control y monitoreo del ambiente de almacenamiento de filamentos de impresión 3D para preservarlos en condiciones óptimas de baja humedad. Muestra valores en tiempo real en display, ofrece web embebida para registros históricos y sincronización con Google Home vía estándar Matter.',
+    tags: ['ESP32-C6', 'BME280', 'Matter', 'IoT', 'Display', 'ASA Print'],
+    status: 'En curso',
+  },
+  {
+    title: 'Sistema integrado de detección de carril, somnolencia y desatención',
+    description:
+      'Control activo de conducción y estado del conductor con alertas ante desatenciones. Integra GPS para seguimiento activo del vehículo y reporte de ubicación del conductor en tiempo real.',
+    tags: ['Computer Vision', 'RaspberryPi 5', 'AI', 'GPS', 'GSM', 'Embedded'],
+    status: 'En curso',
+  },
+  {
+    title: 'Sensor de nivel de agua inalámbrico para uso domiciliario',
+    description:
+      'Monitoreo remoto de nivel de agua en tanques o depósitos en zonas con escasez de agua corriente, para facilitar decisiones de uso eficiente en momentos de necesidad.',
+    tags: ['IoT', 'Wireless', 'Embedded', 'Sensor'],
+    status: 'En fase de diseño',
+  },
+  {
+    title: 'Sistema de alerta y detección de falta de elementos de seguridad',
+    description:
+      'Monitoreo activo de cumplimiento de elementos de protección personal (EPP) en áreas específicas de trabajo.',
+    tags: ['Computer Vision', 'AI', 'Safety', 'IoT'],
+    status: 'En fase de diseño',
+  },
+  {
+    title: 'Sistema de lectura y registro de patentes vehiculares',
+    description:
+      'Lectura automática de patentes vehiculares y verificación de antecedentes en bases de datos. Apoyo a fuerzas de seguridad con control activo en rutas, autopistas y puntos de acceso.',
+    tags: ['Computer Vision', 'ALPR', 'AI', 'IoT'],
+    status: 'En fase de diseño',
+  },
+  {
+    title: 'Sistema de registro de piezas en flujo de manufactura',
+    description:
+      'Trazabilidad de piezas fabricadas mediante lectura de QR o códigos específicos en puntos de paso del proceso. Genera datos para diagnósticos estadísticos, detección de fallas en insumos y métricas del flujo productivo.',
+    tags: ['QR', 'IoT', 'Manufacturing', 'Traceability', 'Embedded'],
+    status: 'En fase de diseño',
+  },
+  {
+    title: 'Gemelo digital de plantas de producción o distribución',
+    description:
+      'Prototipo funcional de gemelo digital para monitorear activos críticos — pozos petroleros y puntos de distribución eléctrica — en un mapa interactivo en tiempo real. Alertas por umbrales dinámicos y detección de tendencias anómalas para mantenimiento predictivo. Prototipado con ESP32 + MQTT; backend (InfluxDB + Grafana) agnóstico al protocolo para escalar a OPC-UA, LoRaWAN o DNP3.',
+    tags: ['Digital Twin', 'ESP32', 'MQTT', 'InfluxDB', 'Grafana', 'IoT', 'Predictive'],
+    status: 'En fase de diseño',
+  },
 ];
 ---
+
 <section id="proyectos" class="relative px-6 md:px-12 py-24 md:py-32 border-t border-white/10 overflow-hidden">
   <BlackholeBackground />
   <div class="relative z-10 max-w-[1200px] mx-auto">
 
     <div class="mb-16">
-      <span class="font-mono text-md uppercase tracking-[1.4px] text-white/30">— Trabajo</span>
+      <span class="font-mono text-xs uppercase tracking-[1.4px] text-white/30">— Trabajo</span>
       <h2 class="font-mono font-light text-3xl md:text-4xl text-white mt-3">Proyectos</h2>
     </div>
 
-    {projects.length === 0 ? (
-      <div class="border border-white/10 p-16 text-center">
-        <p class="font-mono text-sm text-white/30 uppercase tracking-[1.4px]">Próximamente</p>
-      </div>
-    ) : (
-      <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-px bg-white/10">
-        {projects.map((project) => (
-          <div class="bg-[#1f2228] p-8 hover:bg-white/[0.03] transition-colors duration-200">
-            <h3 class="font-mono text-base text-white mb-3">{project.title}</h3>
-            <p class="font-sans text-sm text-white/50 leading-relaxed mb-6">{project.description}</p>
-            <div class="flex flex-wrap gap-2 mb-6">
+    <div class="border-t border-white/10">
+      {projects.map((project) => (
+        <div class="border-b border-white/10 py-8 grid md:grid-cols-[220px_1fr] gap-6 md:gap-12 hover:bg-white/[0.02] transition-colors duration-200 px-2">
+
+          <!-- Left: status + tags -->
+          <div class="flex flex-col gap-4">
+            <span class={`font-mono text-[10px] uppercase tracking-[1px] border px-1.5 py-0.5 self-start
+              ${project.status === 'En curso'
+                ? 'border-white/25 text-white/50'
+                : 'border-white/10 text-white/25'
+              }`}>
+              {project.status}
+            </span>
+            <div class="flex flex-wrap gap-1.5">
               {project.tags.map(tag => (
-                <span class="font-mono text-[10px] uppercase tracking-[1px] text-white/50 border border-white/10 px-2 py-1">
+                <span class="font-mono text-[9px] uppercase tracking-[1px] text-white/25 border border-white/10 px-1.5 py-0.5">
                   {tag}
                 </span>
               ))}
             </div>
-            <div class="flex gap-4">
-              {project.url && (
-                <a href={project.url} class="font-mono text-xs uppercase tracking-[1.4px] text-white hover:text-white/50 transition-colors duration-200">
-                  Ver →
-                </a>
-              )}
-              {project.repo && (
-                <a href={project.repo} class="font-mono text-xs uppercase tracking-[1.4px] text-white/50 hover:text-white/30 transition-colors duration-200">
-                  Repo →
-                </a>
-              )}
-            </div>
           </div>
-        ))}
-      </div>
-    )}
+
+          <!-- Right: title + description + links -->
+          <div>
+            <h3 class="font-sans text-base text-white/80 leading-snug mb-4">{project.title}</h3>
+            <p class="font-sans text-sm text-white/45 leading-relaxed">{project.description}</p>
+            {(project.url || project.repo) && (
+              <div class="flex gap-6 mt-6">
+                {project.url && (
+                  <a href={project.url} target="_blank" rel="noopener noreferrer"
+                    class="font-mono text-xs uppercase tracking-[1.4px] text-white hover:text-white/50 transition-colors duration-200">
+                    Ver →
+                  </a>
+                )}
+                {project.repo && (
+                  <a href={project.repo} target="_blank" rel="noopener noreferrer"
+                    class="font-mono text-xs uppercase tracking-[1.4px] text-white/50 hover:text-white/30 transition-colors duration-200">
+                    Repo →
+                  </a>
+                )}
+              </div>
+            )}
+          </div>
+
+        </div>
+      ))}
+    </div>
 
   </div>
 </section>
