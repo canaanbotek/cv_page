@@ -3,32 +3,92 @@ import BlackholeBackground from './BlackholeBackground.astro';
 
 const technicalGroups = [
   {
-    category: 'Lenguajes & Frameworks',
-    skills:   ['C/C++', 'Python', 'JavaScript', 'TypeScript', 'R', 'VueJS', 'Flask', 'NodeJs', 'ExpressJs'],
+    category: 'Languages',
+    skills: [
+      { name: 'Python',      level: 8 },
+      { name: 'JavaScript',  level: 8 },
+      { name: 'TypeScript',  level: 8 },
+      { name: 'SQL',         level: 8 },
+      { name: 'C',           level: 7 },
+      { name: 'C++',         level: 7 },
+      { name: 'R',           level: 6 },
+    ],
   },
   {
-    category: 'IoT & Embebidos',
-    skills:   ['Protocolos IoT', 'Firmware', 'Microcontroladores', 'RFID', 'KiCad', 'Altium'],
+    category: 'Frameworks & Libraries',
+    skills: [
+      { name: 'Vue.js',      level: 8 },
+      { name: 'TailwindCSS', level: 8 },
+      { name: 'FastAPI',     level: 8 },
+      { name: 'Flask',       level: 8 },
+      { name: 'Node.js',     level: 7 },
+    ],
   },
   {
-    category: 'IA & Machine Learning',
-    skills:   ['pandas', 'NumPy', 'Matplotlib', 'Seaborn', 'MediaPipe', 'OpenCV', 'YOLO', 'TensorFlow', 'Jupyter'],
+    category: 'AI / ML & Computer Vision',
+    skills: [
+      { name: 'NumPy',       level: 8 },
+      { name: 'Matplotlib',  level: 8 },
+      { name: 'OpenCV',      level: 8 },
+      { name: 'YOLO',        level: 8 },
+      { name: 'MediaPipe',   level: 8 },
+      { name: 'Jupyter',     level: 8 },
+      { name: 'Colab',       level: 9 },
+      { name: 'Seaborn',     level: 7 },
+      { name: 'scikit-learn',level: 7 },
+      { name: 'PyTorch',     level: 6 },
+      { name: 'TensorFlow',  level: 6 },
+      { name: 'Pandas',      level: 5 },
+      { name: 'Hugging Face',level: 4 },
+    ],
   },
   {
-    category: 'Cloud & DevOps',
-    skills:   ['AWS', 'AWS Amplify', 'AWS CloudFront', 'AWS API Gateway', 'AWS Lambda', 'Docker', 'Docker Compose', 'Git', 'GitLab', 'Jira'],
+    category: 'Embedded & IoT',
+    skills: [
+      { name: 'MQTT',          level: 10 },
+      { name: 'WebSockets',    level: 9 },
+      { name: 'ESP32',         level: 8 },
+      { name: 'Arduino',       level: 8 },
+      { name: 'Raspberry Pi',  level: 7 },
+      { name: 'Bluetooth BLE', level: 7 },
+      { name: 'STM32',         level: 6 },
+      { name: 'ESP-IDF',       level: 7 },
+      { name: 'LoRaWAN',       level: 6 },
+    ],
   },
   {
-    category: 'Bases de Datos',
-    skills:   ['SQL', 'PostgreSQL'],
+    category: 'Databases & Cloud',
+    skills: [
+      { name: 'PostgreSQL', level: 8 },
+      { name: 'Docker',     level: 7 },
+      { name: 'AWS',        level: 5 },
+    ],
   },
   {
-    category: 'Herramientas',
-    skills:   ['VSCode', 'LaTeX', 'ERP Tryton', 'RStudio', 'Linux', 'Windows'],
+    category: 'Tools & Productivity',
+    skills: [
+      { name: 'Git',        level: 9 },
+      { name: 'VS Code',    level: 9 },
+      { name: 'Terminal',   level: 8 },
+      { name: 'Postman',    level: 8 },
+      { name: 'Windows',    level: 8 },
+      { name: 'Linux',      level: 8 },
+      { name: 'KiCad',      level: 8 },
+      { name: 'Claude Code',level: 8 },
+      { name: 'Obsidian',   level: 9 },
+      { name: 'Notion',     level: 5 },
+      { name: 'NotebookLM', level: 5 },
+    ],
   },
   {
-    category: 'Stack de IA ',
-    skills:   ['Claude Code', 'GitHub Copilot', 'Obsidian', 'Notion'],
+    category: 'Hobby Tools',
+    skills: [
+      { name: 'Creality',      level: 9 },
+      { name: 'OrcaSlicer',    level: 9 },
+      { name: 'FreeCAD',       level: 7 },
+      { name: 'Canva',         level: 7 },
+      { name: 'TouchDesigner', level: 5 },
+    ],
   },
 ];
 
@@ -66,7 +126,7 @@ const languages = [
           <div class="flex flex-wrap gap-2">
             {group.skills.map((skill) => (
               <span class="font-mono text-xs uppercase tracking-[1px] text-white/70 border border-white/10 hover:border-white/20 transition-colors duration-200 px-2.5 py-1">
-                {skill}
+                {skill.name}<span class="text-white/30"> | {skill.level}</span>
               </span>
             ))}
           </div>
